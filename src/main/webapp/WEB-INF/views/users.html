@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"
+          media="all"/>
+    <title>Spring MVC CRUD project</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}"/>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1 class="header-heading">List of Users in DB</h1>
+    </div>
+</header>
+<main class="content">
+    <div class="container">
+        <div class="main">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>email</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody th:if="${not #lists.isEmpty(users)}">
+                <tr th:each="user : ${users}">
+                    <th scope="row" th:text="${user.id}">1</th>
+                    <td th:text="${user.firstName}">Joe</td>
+                    <td th:text="${user.lastName}">Doe</td>
+                    <td th:text="${user.email}">JDoe@mail.net</td>
+                    <td><a th:href="@{/user/edit/{userId}(userId=${user.id})}"
+                           href="http://localhost:8081/user/edit/XX">EDIT</a></td>
+                    <td>
+                        <form action="#" method="post"
+                              th:action="@{/user/delete/{userId}(userId=${user.id})}">
+                            <button class="btn" type="submit" id="submitButton">DELETE</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p>
+                <a href="../" th:href="@{/user/new}">Create new User with form</a>
+            </p>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <div class="container">&copy; Alex Soft 2018</div>
+</footer>
+</body>
+</html>
