@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HtmlController {
@@ -18,10 +19,34 @@ public class HtmlController {
         this.userService = userService;
     }
 
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public ModelAndView loginPage(@RequestParam(value = "error",required = false) String error,
+                                  @RequestParam(value = "logout",	required = false) String logout) {
+
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            model.addObject("error", "Invalid Credentials provided.");
+            model.setViewName("signin");
+        }
+
+        if (logout != null) {
+            model.addObject("message", "Logged out successfully.");
+            model.setViewName("signin");
+        }
+
+        model.setViewName("signin");
+        return model;
+    }
+
     @RequestMapping("user/new")
     public String newUser(Model model) {
         model.addAttribute("user", new User());
         return "userform";
+    }
+
+    @RequestMapping("adminpanel")
+    public String adminPanel(Model model) {
+        return "adminpanel";
     }
 
     @RequestMapping(value = "user/{id}", produces = "text/html")

@@ -71,6 +71,8 @@ public class MvcWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/images/");
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/js/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+
+        registry.addResourceHandler("/userpanel*").addResourceLocations("classpath:/static/userpanel.html");
     }
 
     @Bean

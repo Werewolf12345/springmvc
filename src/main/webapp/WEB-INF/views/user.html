@@ -10,13 +10,6 @@
     <title>User Details</title>
 </head>
 <body>
-<div class="container"><br/>
-    <div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert"
-           aria-label="close">&times;</a>
-        <strong>Success!</strong> It is working as we expected.
-    </div>
-</div>
 <main role="main" class="container">
     <h1 class="mt-5 user-id">User ID: </h1>
     <p class="lead user-firstname">First Name: </p>
@@ -32,8 +25,8 @@
 <script src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="/js/ajaxscripts.js"></script>
 <script th:inline="javascript">
-    var id = [[${userid}]];
-    $(document).ready(getuserdata(id));
+    var url = [[@{/user/{userId}(userId=${userid})}]];
+    $(document).ready(getuserdata(url));
 </script>
 </body>
 </html>

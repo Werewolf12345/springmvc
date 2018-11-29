@@ -1,6 +1,6 @@
-function getuserdata(id) {
+function getuserdata(url) {
     $.ajax({
-        url: "http://localhost:8081/user/"+id
+        url: url
     }).then(function(data) {
         $('.user-id').append(data.id);
         $('.user-firstname').append(data.firstName);
@@ -8,3 +8,17 @@ function getuserdata(id) {
         $('.user-email').append(data.email);
     });
 }
+
+function userstable() {
+    $.ajax({
+        url: '/users',
+        success(response) {
+            var trHTML = '';
+            $.each(response, function (i, item) {
+                trHTML += '<tr><td>' + item.id + '</td><td>' + item.firstName + '</td><td>' + item.lastName + '</td><td>' + item.email + '</td></tr>';
+            });
+            $('#userstable').append(trHTML);
+        }
+    });
+}
+

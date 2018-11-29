@@ -5,11 +5,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
    @Override
-   protected Class<?>[] getRootConfigClasses() {
-      return null;
-   }
-
-   @Override
    protected Class<?>[] getServletConfigClasses() {
       return new Class[] { MvcWebConfig.class };
    }
@@ -17,6 +12,11 @@ public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispat
    @Override
    protected String[] getServletMappings() {
       return new String[] { "/" };
+   }
+
+   @Override
+   protected Class<?>[] getRootConfigClasses() {
+      return new Class[] {SecSecurityConfig.class};
    }
 
 }
