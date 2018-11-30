@@ -15,10 +15,14 @@ function userstable() {
         success(response) {
             var trHTML = '';
             $.each(response, function (i, item) {
-                trHTML += '<tr><td>' + item.id + '</td><td>' + item.firstName + '</td><td>' + item.lastName + '</td><td>' + item.email + '</td></tr>';
+                trHTML += '<tr class=\'clickable-row\' data-href=\'/user/' + item.id + '\''
+                    + '><td>' + item.id + '</td><td>' + item.firstName + '</td><td>' + item.lastName
+                    + '</td><td>' + item.email + '</td></tr>';
             });
             $('#userstable').append(trHTML);
         }
     });
+
+
 }
 

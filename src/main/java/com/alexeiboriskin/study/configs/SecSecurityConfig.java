@@ -28,6 +28,8 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signin", "/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
                 .antMatchers("/**").access("hasRole('ROLE_USER')")
                 .and()
+                .httpBasic()
+                .and()
                 .csrf().disable()
                 .formLogin().loginPage("/signin")
                 .loginProcessingUrl("/perform_login")

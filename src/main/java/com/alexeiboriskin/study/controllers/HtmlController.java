@@ -75,7 +75,7 @@ public class HtmlController {
 
     @PostMapping(value = "user/new")
     public String saveUser(User user) {
-        userService.saveProduct(user);
+        userService.saveUser(user);
         return "redirect:/users";
     }
 }
