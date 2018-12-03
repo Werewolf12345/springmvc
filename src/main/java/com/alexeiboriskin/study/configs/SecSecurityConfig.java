@@ -1,6 +1,9 @@
 package com.alexeiboriskin.study.configs;
 
+import com.alexeiboriskin.study.models.User;
+import com.alexeiboriskin.study.services.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,14 +14,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@ComponentScan("com.alexeiboriskin.study")
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final MyUserDetailsService myUserDetailsService;
+
+    public SecSecurityConfig(MyUserDetailsService myUserDetailsService) {
+        this.myUserDetailsService = myUserDetailsService;
+    }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER");
+        auth.userDetailsService(myUserDetailsService).passwordEncoder(User.PASSWORD_ENCODER);
     }
 
     @Override

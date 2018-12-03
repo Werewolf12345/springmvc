@@ -17,7 +17,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:persistence-user.properties")
-@EnableJpaRepositories(basePackages = "com.alexeiboriskin.study.dao")
+@EnableJpaRepositories(basePackages = "com.alexeiboriskin.study.repositories")
 @EnableTransactionManagement
 public class DataSourceConfig {
     private static final String[] ENTITY_PACKAGES = {"com.alexeiboriskin.study.models"};
@@ -62,6 +62,7 @@ public class DataSourceConfig {
         jpaProperties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
         jpaProperties.put(PROPERTY_NAME_HIBERNATE_FORMAT_SQL,
                 env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_FORMAT_SQL));
+        jpaProperties.put("h2.tcp.enabled", "true");
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 

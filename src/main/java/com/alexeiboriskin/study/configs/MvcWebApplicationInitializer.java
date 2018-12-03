@@ -1,5 +1,6 @@
 package com.alexeiboriskin.study.configs;
 
+import com.alexeiboriskin.study.services.MyUserDetailsService;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -16,7 +17,6 @@ public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispat
 
    @Override
    protected Class<?>[] getRootConfigClasses() {
-      return new Class[] {SecSecurityConfig.class};
+      return new Class[] {MyUserDetailsService.class, SecSecurityConfig.class};
    }
-
 }

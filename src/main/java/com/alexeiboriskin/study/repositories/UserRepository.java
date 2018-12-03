@@ -1,4 +1,4 @@
-package com.alexeiboriskin.study.dao;
+package com.alexeiboriskin.study.repositories;
 
 import com.alexeiboriskin.study.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
