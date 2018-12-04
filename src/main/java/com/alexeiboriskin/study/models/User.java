@@ -1,6 +1,7 @@
 package com.alexeiboriskin.study.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 @SuppressWarnings("unused")
 @Entity
+@DynamicUpdate
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +23,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    @JsonIgnore
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "PASSWORD", nullable = false, updatable= false)
     private String password;
     private String[] roles;
 

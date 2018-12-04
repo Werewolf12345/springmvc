@@ -33,7 +33,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/signin", "/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
-                .antMatchers("/**").access("hasRole('ROLE_USER')")
+                .antMatchers("/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .and()
                 .httpBasic()
                 .and()

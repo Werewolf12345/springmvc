@@ -29,8 +29,9 @@ public class UserService {
                 .withIgnorePaths("id")
                 .withMatcher("username",
                         GenericPropertyMatcher::exact);
+        User userInDb = userRepository.findOne(Example.of(exampleUser, matcher)).orElse(null);
 
-        if (!userRepository.findAll(Example.of(exampleUser, matcher)).isEmpty()) {
+        if (userInDb != null && userInDb.getId() != user.getId()) {
             logger.info("Username already exists!");
             return null;
         } else {

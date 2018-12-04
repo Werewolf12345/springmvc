@@ -3,9 +3,11 @@ function getuserdata(url) {
         url: url
     }).then(function(data) {
         $('.user-id').append(data.id);
+        $('.user-username').append(data.username);
         $('.user-firstname').append(data.firstName);
         $('.user-lastname').append(data.lastName);
         $('.user-email').append(data.email);
+        $('.user-roles').append(data.roles.join(', '));
     });
 }
 

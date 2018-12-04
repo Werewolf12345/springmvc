@@ -2,6 +2,8 @@ package com.alexeiboriskin.study.controllers;
 
 import com.alexeiboriskin.study.models.User;
 import com.alexeiboriskin.study.services.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +41,10 @@ public class RestfulController {
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public void deleteUserById(@PathVariable("id") long id) {
         userService.deleteUser(id);
+    }
+
+    @GetMapping(value = "/logged", produces = "application/json")
+    public User getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.findByUserName(userDetails.getUsername());
     }
 }

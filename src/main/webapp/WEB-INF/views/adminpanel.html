@@ -43,7 +43,6 @@
                 </ul>
             </div>
         </nav>
-
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <h2>Users in DB</h2>
             <p class="toolbar">
@@ -58,9 +57,11 @@
                     <thead>
                     <tr>
                         <th data-field="id">User ID</th>
+                        <th data-field="username">Username</th>
                         <th data-field="firstName">First Name</th>
                         <th data-field="lastName">Last Name</th>
                         <th data-field="email">email</th>
+                        <th data-field="roles">Roles</th>
                     </tr>
                     </thead>
                 </table>
@@ -80,6 +81,11 @@
                                 <input type="number" class="form-control" name="id" placeholder="User ID" disabled>
                             </div>
                             <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control"
+                                       name="username" placeholder="Username">
+                            </div>
+                            <div class="form-group">
                                 <label>First Name</label>
                                 <input type="text" class="form-control" name="firstName" placeholder="First Name">
                             </div>
@@ -91,11 +97,74 @@
                                 <label>Email</label>
                                 <input type="text" class="form-control" name="email" placeholder="email">
                             </div>
+                            <div class="form-group">
+                                <label>Roles</label>
+                                <input type="text" class="form-control"
+                                       name="roles" id="roles"
+                                       placeholder="Roles">
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-danger remove">Delete</button>
                             <button type="button" class="btn btn-primary submit">Submit</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- Modal -->
+            <div id="modalcreate" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control"
+                                       name="username" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control"
+                                       name="password" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control"
+                                       name="firstName"
+                                       placeholder="First Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control"
+                                       name="lastName" placeholder="Last Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control"
+                                       name="email" placeholder="email">
+                            </div>
+                            <div class="form-group">
+                                <label>Roles</label>
+                                <input type="text" class="form-control"
+                                       name="roles" id="rolescreate"
+                                       placeholder="Roles">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">Close
+                            </button>
+                            <button type="button"
+                                    class="btn btn-primary submit">Submit
+                            </button>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -115,6 +184,7 @@
     var API_URL = 'http://' + location.host + '/users/',
         $table = $('#userstable').bootstrapTable({url: API_URL}),
         $modal = $('#modal').modal({show: false}),
+        $modalcreate = $('#modalcreate').modal({show: false}),
         $alert = $('.alert').hide();
 
     $table.on('click-row.bs.table', function (e, row, $element) {
@@ -124,8 +194,7 @@
     $(function () {
         // create event
         $('.create').click(function () {
-            showModal($(this).text());
-            $('.remove').prop('disabled', true);
+            $modalcreate.modal('show');
         });
 
         $modal.find('.submit').click(function () {
@@ -133,7 +202,12 @@
 
             $modal.find('input[name]').each(function () {
                 row[$(this).attr('name')] = $(this).val();
+
             });
+
+            var roles = $('#roles').val().split(',').map(String);
+
+            row['roles'] = roles;
 
             $.ajax({
                 url: API_URL + ($modal.data('id') || ''),
@@ -148,6 +222,32 @@
                 error: function () {
                     $modal.modal('hide');
                     showAlert(($modal.data('id') ? 'Update' : 'Create') + ' user error!', 'danger');
+                }
+            });
+        });
+
+        $modalcreate.find('.submit').click(function () {
+            var row = {};
+
+            $modalcreate.find('input[name]').each(function () {
+                row[$(this).attr('name')] = $(this).val();
+            });
+
+            row['roles'] = $('#modalcreate #rolescreate').val().split(',').map(String);
+
+            $.ajax({
+                url: API_URL,
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(row),
+                success: function () {
+                    $modalcreate.modal('hide');
+                    $table.bootstrapTable('refresh');
+                    showAlert('User created successfully!', 'success');
+                },
+                error: function () {
+                    $modalcreate.modal('hide');
+                    showAlert('Error during user creation!', 'danger');
                 }
             });
         });
@@ -178,9 +278,11 @@
     function showModal(title, row) {
         row = row || {
             id: '',
+            username: '',
             firstName: '',
             lastName: '',
             email: '',
+            roles: ''
         }; // default row value
 
         $modal.data('id', row.id);
