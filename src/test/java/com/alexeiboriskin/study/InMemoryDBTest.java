@@ -1,6 +1,7 @@
 package com.alexeiboriskin.study;
 
 import com.alexeiboriskin.study.configs.db.DataSourceConfig;
+import com.alexeiboriskin.study.models.Role;
 import com.alexeiboriskin.study.models.User;
 import com.alexeiboriskin.study.repositories.UserRepository;
 import org.junit.Test;
@@ -14,6 +15,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +34,8 @@ public class InMemoryDBTest {
 
     @Test
     public void givenUserWhenSaveThenGetOk() {
-        User user = new User("i_petrov", "Ivan", "Petrov", "IPetrov@gmail.com", "pass2", new String[]{"ADMIN"});
+        User user = new User("i_petrov", "Ivan", "Petrov",
+                "IPetrov@gmail.com", "pass2", new HashSet<>(Collections.singletonList(new Role("ROLE_ADMIN"))));
         userRepository.save(user);
         assertEquals(1L, userRepository.count());
 

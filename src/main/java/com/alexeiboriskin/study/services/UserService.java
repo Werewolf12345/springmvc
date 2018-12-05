@@ -6,6 +6,7 @@ import org.jboss.logging.Logger;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,10 +18,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final Logger logger = Logger.getLogger(this.getClass());
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository
+                       ) {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User saveUser(User user) {
         User exampleUser = new User();
         exampleUser.setUsername(user.getUsername());

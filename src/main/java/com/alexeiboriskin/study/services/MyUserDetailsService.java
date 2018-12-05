@@ -1,7 +1,6 @@
 package com.alexeiboriskin.study.services;
 
 import com.alexeiboriskin.study.models.User;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,8 +21,6 @@ public class MyUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username + " was not found!");
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), AuthorityUtils.createAuthorityList(user.getRoles()));
+        return user;
     }
 }
