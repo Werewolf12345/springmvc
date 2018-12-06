@@ -6,7 +6,6 @@ import org.jboss.logging.Logger;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,7 +22,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public User saveUser(User user) {
         User exampleUser = new User();
         exampleUser.setUsername(user.getUsername());
@@ -33,13 +31,15 @@ public class UserService {
                 .withMatcher("username",
                         GenericPropertyMatcher::exact);
         User userInDb = userRepository.findOne(Example.of(exampleUser, matcher)).orElse(null);
-
+        if (userInDb == null) {
+            user.encryptAndSetPassword(user.getPassword());
+        }
         if (userInDb != null && userInDb.getId() != user.getId()) {
             logger.info("Username already exists!");
             return null;
-        } else {
-            return userRepository.save(user);
         }
+        return userRepository.save(user);
+
     }
 
     public User getUserById(Long id) {

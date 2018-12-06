@@ -2,6 +2,7 @@ package com.alexeiboriskin.study.bootstrap;
 
 import com.alexeiboriskin.study.models.Role;
 import com.alexeiboriskin.study.models.User;
+import com.alexeiboriskin.study.repositories.RoleRepository;
 import com.alexeiboriskin.study.services.UserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -13,18 +14,24 @@ import java.util.HashSet;
 
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
-
     private UserService userService;
+    private RoleRepository roleRepository;
 
-    public DevBootstrap(UserService userService) {
+    public DevBootstrap(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
+   // @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
         Role roleGuest = new Role("ROLE_GUEST");
+
+        roleAdmin = roleRepository.save(roleAdmin);
+        roleUser = roleRepository.save(roleUser);
+        roleGuest = roleRepository.save(roleGuest);
 
         User admin = new User("admin", "John", "Connor", "JConnor@gmail.com",
                 "admin", new HashSet<>(Arrays.asList(roleAdmin, roleUser, roleGuest)));

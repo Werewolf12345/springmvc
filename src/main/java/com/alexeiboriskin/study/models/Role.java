@@ -1,34 +1,34 @@
 package com.alexeiboriskin.study.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "ROLE")
-@Access(AccessType.FIELD)
+@Access(AccessType.PROPERTY)
 @DynamicUpdate
 public class Role implements GrantedAuthority {
-    @Id
-    @Column(name = "ROLE_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
-
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<User> users;
-
     private String role;
-
-    public Role() {
-        super();
-    }
 
     public Role(String role) {
         this.role = role;
     }
 
+    public Role() {
+        super();
+    }
+
+    @Id
+    @Column(name = "ROLE_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -37,6 +37,8 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     public Set<User> getUsers() {
         return users;
     }
@@ -45,10 +47,17 @@ public class Role implements GrantedAuthority {
         this.users = users;
     }
 
+    @Column(unique = true)
     public String getRole() {
         return role;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Transient
+    @JsonIgnore
     @Override
     public String getAuthority() {
         return role;
