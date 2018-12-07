@@ -9,8 +9,6 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 @Entity
-@Table(name = "ROLE")
-@Access(AccessType.PROPERTY)
 @DynamicUpdate
 public class Role implements GrantedAuthority {
 
@@ -38,7 +36,7 @@ public class Role implements GrantedAuthority {
     }
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     public Set<User> getUsers() {
         return users;
     }

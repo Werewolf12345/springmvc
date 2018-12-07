@@ -1,13 +1,17 @@
 package com.alexeiboriskin.study.services;
 
+import com.alexeiboriskin.study.models.Role;
 import com.alexeiboriskin.study.models.User;
 import com.alexeiboriskin.study.repositories.UserRepository;
 import org.jboss.logging.Logger;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
 import static org.springframework.data.domain.ExampleMatcher.matching;
@@ -15,14 +19,19 @@ import static org.springframework.data.domain.ExampleMatcher.matching;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private RoleService roleService;
     private final Logger logger = Logger.getLogger(this.getClass());
 
-    public UserService(UserRepository userRepository
-                       ) {
+    public UserService(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
+    @Transactional
     public User saveUser(User user) {
+        Set<Role> dbRolesSet = user.getRoles().stream().map(roleService::saveRole).collect(Collectors.toSet());
+        user.setRoles(dbRolesSet);
+
         User exampleUser = new User();
         exampleUser.setUsername(user.getUsername());
         ExampleMatcher matcher = matching()
@@ -36,7 +45,7 @@ public class UserService {
         }
         if (userInDb != null && userInDb.getId() != user.getId()) {
             logger.info("Username already exists!");
-            return null;
+            return userInDb;
         }
         return userRepository.save(user);
 

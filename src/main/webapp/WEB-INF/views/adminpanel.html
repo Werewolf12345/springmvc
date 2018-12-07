@@ -53,17 +53,8 @@
             <div class="table-responsive">
                 <table id="userstable"
                        class="table table-striped table-sm"
-                       data-search="true">
-                    <thead>
-                    <tr>
-                        <th data-field="id">User ID</th>
-                        <th data-field="username">Username</th>
-                        <th data-field="firstName">First Name</th>
-                        <th data-field="lastName">Last Name</th>
-                        <th data-field="email">email</th>
-                        <th data-field="roles">Roles</th>
-                    </tr>
-                    </thead>
+                >
+
                 </table>
             </div>
             <!-- Modal -->
@@ -99,9 +90,32 @@
                             </div>
                             <div class="form-group">
                                 <label>Roles</label>
-                                <input type="text" class="form-control"
-                                       name="roles" id="roles"
-                                       placeholder="Roles">
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_ADMIN"
+                                               value="admin">
+                                        <label class="form-check-label"
+                                               for="ROLE_ADMIN">ADMIN</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_USER"
+                                               value="user">
+                                        <label class="form-check-label"
+                                               for="ROLE_USER">USER</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_GUEST"
+                                               value="guest">
+                                        <label class="form-check-label"
+                                               for="ROLE_GUEST">GUEST</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -118,7 +132,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title"></h4>
+                            <h4 class="modal-title">Create User</h4>
                             <button type="button" class="close"
                                     data-dismiss="modal"
                                     aria-label="Close"><span
@@ -153,9 +167,32 @@
                             </div>
                             <div class="form-group">
                                 <label>Roles</label>
-                                <input type="text" class="form-control"
-                                       name="roles" id="rolescreate"
-                                       placeholder="Roles">
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_ADMIN_CREATE"
+                                               value="admin">
+                                        <label class="form-check-label"
+                                               for="ROLE_ADMIN">ADMIN</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_USER_CREATE"
+                                               value="user">
+                                        <label class="form-check-label"
+                                               for="ROLE_USER">USER</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="ROLE_GUEST_CREATE"
+                                               value="guest">
+                                        <label class="form-check-label"
+                                               for="ROLE_GUEST">GUEST</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -182,7 +219,46 @@
 
 <script>
     var API_URL = 'http://' + location.host + '/users/',
-        $table = $('#userstable').bootstrapTable({url: API_URL}),
+        $table = $('#userstable').bootstrapTable({
+            url: API_URL,
+            search: true,
+            columns: [{
+                field: 'id',
+                title: 'User ID',
+                sortable: true
+            }, {
+                field: 'username',
+                title: 'Username',
+                sortable: true
+            }, {
+                field: 'firstName',
+                title: 'First Name',
+                sortable: true
+            }, {
+                field: 'lastName',
+                title: 'Last Name',
+                sortable: true
+            }, {
+                field: 'email',
+                title: 'Email',
+                sortable: true
+            }, {
+                field: 'roles',
+                title: 'Roles',
+                formatter: function rolesFormatter(value) {
+                    var roles = '';
+                    for (var index = 0; index < value.length; index++) {
+                        roles += '<div class="form-check form-check-inline">\n' +
+                            '  <input class="form-check-input" type="checkbox" checked="true" id="' + value[index].role +
+                            '" value="' + value[index].role + '" disabled>\n' +
+                            '  <label class="form-check-label">' + value[index].role.replace('ROLE_', '') + '</label>\n' +
+                            '</div>';
+                    }
+                    return roles;
+                },
+                sortable: true
+            }]
+        });
         $modal = $('#modal').modal({show: false}),
         $modalcreate = $('#modalcreate').modal({show: false}),
         $alert = $('.alert').hide();
@@ -290,6 +366,13 @@
         for (var name in row) {
             $modal.find('input[name="' + name + '"]').val(row[name]);
         }
+
+        $('#modal input[type="checkbox"]').prop('checked', false);
+
+        $.each(row.roles, function(i, role) {
+            $modal.find('input[id="' + role.role + '"]').prop('checked', true);
+        });
+
         $('.remove').prop('disabled', false);
         $modal.modal('show');
     }

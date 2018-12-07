@@ -7,7 +7,9 @@ function getuserdata(url) {
         $('.user-firstname').append(data.firstName);
         $('.user-lastname').append(data.lastName);
         $('.user-email').append(data.email);
-        $('.user-roles').append(data.roles.join(', '));
+        $('.user-roles').append(data.roles.map(function (item) {
+            return item['role'].replace('ROLE_', '');
+        }).join(', '));
     });
 }
 

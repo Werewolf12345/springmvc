@@ -2,11 +2,12 @@ package com.alexeiboriskin.study.bootstrap;
 
 import com.alexeiboriskin.study.models.Role;
 import com.alexeiboriskin.study.models.User;
-import com.alexeiboriskin.study.repositories.RoleRepository;
+import com.alexeiboriskin.study.services.RoleService;
 import com.alexeiboriskin.study.services.UserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,23 +16,23 @@ import java.util.HashSet;
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private UserService userService;
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
-    public DevBootstrap(UserService userService, RoleRepository roleRepository) {
+    public DevBootstrap(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
-   // @Transactional
+    @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
         Role roleGuest = new Role("ROLE_GUEST");
 
-        roleAdmin = roleRepository.save(roleAdmin);
-        roleUser = roleRepository.save(roleUser);
-        roleGuest = roleRepository.save(roleGuest);
+        roleAdmin = roleService.saveRole(roleAdmin);
+        roleUser = roleService.saveRole(roleUser);
+        roleGuest = roleService.saveRole(roleGuest);
 
         User admin = new User("admin", "John", "Connor", "JConnor@gmail.com",
                 "admin", new HashSet<>(Arrays.asList(roleAdmin, roleUser, roleGuest)));

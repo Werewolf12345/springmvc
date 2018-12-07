@@ -97,9 +97,9 @@ public class User implements UserDetails {
             this.password = password;
     }
 
-    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID"
-    )}, inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")},
+                            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     public Set<Role> getRoles() {
         return roles;
     }
