@@ -48,7 +48,14 @@ public class UserService {
             return userInDb;
         }
         return userRepository.save(user);
+    }
 
+    @Transactional
+    public User updateUser(User user) {
+        Set<Role> dbRolesSet = user.getRoles().stream().map(roleService::saveRole).collect(Collectors.toSet());
+        user.setRoles(dbRolesSet);
+
+        return userRepository.save(user);
     }
 
     public User getUserById(Long id) {
@@ -59,6 +66,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

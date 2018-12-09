@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/users")
 public class RestfulController {
+
     private final UserService userService;
 
     public RestfulController(UserService userService) {
@@ -35,7 +36,7 @@ public class RestfulController {
     @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     public User putUser(@PathVariable("id") long id, @RequestBody User user) {
         user.setId(id);
-        return userService.saveUser(user);
+        return userService.updateUser(user);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")

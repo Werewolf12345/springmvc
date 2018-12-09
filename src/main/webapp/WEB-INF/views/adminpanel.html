@@ -95,7 +95,7 @@
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_ADMIN"
-                                               value="admin">
+                                               value="ROLE_ADMIN">
                                         <label class="form-check-label"
                                                for="ROLE_ADMIN">ADMIN</label>
                                     </div>
@@ -103,7 +103,7 @@
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_USER"
-                                               value="user">
+                                               value="ROLE_USER">
                                         <label class="form-check-label"
                                                for="ROLE_USER">USER</label>
                                     </div>
@@ -111,7 +111,7 @@
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_GUEST"
-                                               value="guest">
+                                               value="ROLE_GUEST">
                                         <label class="form-check-label"
                                                for="ROLE_GUEST">GUEST</label>
                                     </div>
@@ -172,25 +172,25 @@
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_ADMIN_CREATE"
-                                               value="admin">
+                                               value="ROLE_ADMIN">
                                         <label class="form-check-label"
-                                               for="ROLE_ADMIN">ADMIN</label>
+                                               for="ROLE_ADMIN_CREATE">ADMIN</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_USER_CREATE"
-                                               value="user">
+                                               value="ROLE_USER">
                                         <label class="form-check-label"
-                                               for="ROLE_USER">USER</label>
+                                               for="ROLE_USER_CREATE">USER</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input"
                                                type="checkbox"
                                                id="ROLE_GUEST_CREATE"
-                                               value="guest">
+                                               value="ROLE_GUEST">
                                         <label class="form-check-label"
-                                               for="ROLE_GUEST">GUEST</label>
+                                               for="ROLE_GUEST_CREATE">GUEST</label>
                                     </div>
                                 </div>
                             </div>
@@ -281,8 +281,12 @@
 
             });
 
-            var roles = $('#roles').val().split(',').map(String);
-
+            var roles = [];
+            $modal.find('input[type=checkbox]').each(function () {
+                if(this.checked) {
+                    roles.push({ 'role' : $(this).val()})
+                }
+            });
             row['roles'] = roles;
 
             $.ajax({
@@ -309,7 +313,13 @@
                 row[$(this).attr('name')] = $(this).val();
             });
 
-            row['roles'] = $('#modalcreate #rolescreate').val().split(',').map(String);
+            var roles = [];
+            $modalcreate.find('input[type=checkbox]').each(function () {
+                if(this.checked) {
+                    roles.push({ 'role' : $(this).val()})
+                }
+            });
+            row['roles'] = roles;
 
             $.ajax({
                 url: API_URL,

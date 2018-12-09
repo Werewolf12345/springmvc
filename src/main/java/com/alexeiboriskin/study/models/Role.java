@@ -5,7 +5,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @SuppressWarnings("unused")
 @Entity
@@ -13,7 +12,6 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
 
     private long id;
-    private Set<User> users;
     private String role;
 
     public Role(String role) {
@@ -21,7 +19,6 @@ public class Role implements GrantedAuthority {
     }
 
     public Role() {
-        super();
     }
 
     @Id
@@ -33,16 +30,6 @@ public class Role implements GrantedAuthority {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
     @Column(unique = true)

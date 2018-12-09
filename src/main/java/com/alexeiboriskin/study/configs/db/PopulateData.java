@@ -1,4 +1,4 @@
-package com.alexeiboriskin.study.bootstrap;
+package com.alexeiboriskin.study.configs.db;
 
 import com.alexeiboriskin.study.models.Role;
 import com.alexeiboriskin.study.models.User;
@@ -14,11 +14,11 @@ import java.util.Collections;
 import java.util.HashSet;
 
 @Component
-public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+public class PopulateData implements ApplicationListener<ContextRefreshedEvent> {
     private UserService userService;
     private RoleService roleService;
 
-    public DevBootstrap(UserService userService, RoleService roleService) {
+    public PopulateData(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
